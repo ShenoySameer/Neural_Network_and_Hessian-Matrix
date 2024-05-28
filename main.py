@@ -72,8 +72,9 @@ def one_hot(y):
 def back_prop(Z1, A1, Z2, A2, W2, X, y):
     one_hot_y = one_hot(y)
     m = y.size
-    dC_dW2 = A1 * derivative_Leaky_ReLU(Z2) * (2 * (A2 - one_hot_y))
-    dC_db2 =A1 * derivative_Leaky_ReLU(Z2) * (2 * (A2 - one_hot_y))
+    dC_dW2 = a1 * derivative_Leaky_ReLU(Z2) * (2 * (A2 - one_hot_y))
+    dC_db2 = derivative_Leaky_ReLU(Z2) * (2 * (A2 - one_hot_y))
+
     return dC_dW1, dC_db1, dC_dW2, dC_db2
 
 
@@ -96,11 +97,12 @@ def get_accuracy(predictions, y):
 def neural_network(X, y, iterations, alpha, W1_nodes):
     W1, b1, W2, b2 = init_params(X, y, hidden_layer_1_nodes=10)
     for i in range(iterations):
-        Z1, A1, Z2, A2 = forward_prop(W1, b1, W2, b2, X, )
+        Z1, A1, Z2, A2 = forward_prop(W1, b1, W2, b2, X)
         dC_dW1, dC_db1, dC_dW2, dC_db2 = back_prop(Z1, A1, Z2, A2, W2, X, y)
         W1, b1, W2, b2 = update_params(W1, b1, W2, b2, dC_dW1, dC_db1, dC_dW2, dC_db2, alpha)
         if i % 100 == 0:
             print("Iteration:", i)
             print("Accuracy:", get_accuracy(get_predictions(A2), y))
+
 
 init_params(X_train, y_train)
