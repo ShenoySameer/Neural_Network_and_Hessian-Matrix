@@ -124,3 +124,12 @@ for i in range(iterations):
     cost /= len(x)
     if (i+1)%1000 == 0:
         print(i+1, cost)
+
+def applyNeuralNetwork(network, X):
+    for layer in network:
+        X = layer.forward(X)
+    return X
+
+
+test_input = np.reshape([[0, 0]], (2, 1))  # Example input
+print(f'Input: {test_input.flatten()} Gives output: {applyNeuralNetwork(network, test_input)}')
