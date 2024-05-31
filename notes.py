@@ -44,7 +44,8 @@
 # Once we've calculated the derivatives,
 # we subtract the learning rate times the derivative from every weight and bias.
 
-
+# useful line:
+# print('\n'.join([str(list(item)) for item in one_hot_y]).replace('.0', '').replace('0', ' ').replace(',', '').replace('1', '██'))
 
 
 
