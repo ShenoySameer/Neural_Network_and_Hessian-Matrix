@@ -106,6 +106,18 @@ def applyNeuralNetwork(network, X):
         X = layer.forward(X)
     return X
 
-test_input = X_test[:, :, np.newaxis][0]
-print(f'Input: {test_input.flatten()} Gives output: {applyNeuralNetwork(network, test_input)}')
-print(y_test[0])
+X_test = X_test[:, :, np.newaxis]
+total_count = 0
+correct_count = 0
+for i in range(len(X_test)):
+    total_count += 1
+    test_input = X_test[i]
+    out = applyNeuralNetwork(network, test_input)
+    if list(out).index(max(out)) == y_test[i]:
+        correct_count += 1
+        print('correct')
+    else:
+        print('incorrect')
+print(correct_count/total_count)
+# print(f'Input: {test_input.flatten()} Gives output: {applyNeuralNetwork(network, test_input)}')
+# print(y_test)
