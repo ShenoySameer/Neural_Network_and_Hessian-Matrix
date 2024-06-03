@@ -3,23 +3,28 @@ from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 
+# Load the dataset
 digits = load_digits()
 data = np.array(digits.data)
 target = np.array(digits.target)
 
+# Split the dataset into training and test sets
 X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.2, random_state=15)
-
-X_train = X_train.T
-X_test = X_test.T
 
 # Normalize the input data
 X_train = X_train / 16.0
 X_test = X_test / 16.0
 
-y_train = y_train  # y's are vectors, no need to transpose.
+# No need to transpose y values
+y_train = y_train
 y_test = y_test
 
-X_train = np.reshape(X_train, (64, 1437, 1)).T
+# Print the shape of the training data
+print(X_train.shape)  # Should be (1437, 64)
+
+# Reshape the training data correctly
+X_train = X_train.T
+print(X_train.shape)  # Should be (64, 1437)
 
 class Dense():
     def __init__(self, input_size, output_size):
@@ -71,24 +76,25 @@ network = [
     Leaky_ReLU()
 ]
 
-iterations = 10
+iterations = 1000
 learning_rate = 0.001  # Reduced learning rate
 
 for i in range(iterations):
     cost = 0
 
-    for x, y in zip(X_train, y_train):
-        print(x.shape)
+    for x, y in zip(X_train.T, y_train):
+        x = x.reshape(64, 1)  # Ensure each input is (64, 1)
         output = x
         for layer in network:
             output = layer.forward(output)
 
+        y = np.eye(10)[y].reshape(10, 1)  # Convert y to one-hot encoding
         cost += mse(y, output)
         gradient = mse_prime(y, output)
         for layer in reversed(network):
             gradient = layer.backward(gradient, learning_rate)
 
-    cost /= len(X_train)
+    cost /= len(X_train.T)
     if (i+1) % 10 == 0:
         print(f"Iteration {i+1}, Cost: {cost}")
         if np.isnan(cost):
@@ -101,5 +107,5 @@ def applyNeuralNetwork(network, X):
     return X
 
 test_input = X_test[:, :, np.newaxis][0]
-print(f'Input: {test_input.flatten()} Gives output: {applyNeuralNetwork(network, X_test)}')
+print(f'Input: {test_input.flatten()} Gives output: {applyNeuralNetwork(network, test_input)}')
 print(y_test[0])
